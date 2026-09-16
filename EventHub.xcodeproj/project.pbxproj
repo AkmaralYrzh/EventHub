@@ -21,6 +21,7 @@
 		D0A9241B30153F24008F98E4 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Localizable.strings; sourceTree = "<group>"; };
 		D0A9241E30153F24008F98E4 /* kk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kk; path = Localizable.strings; sourceTree = "<group>"; };
 		D0A9242130153F24008F98E4 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = Localizable.strings; sourceTree = "<group>"; };
+		D0AA000000000000000000A8 /* EventHubTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EventHubTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -72,6 +73,11 @@
 			path = Service;
 			sourceTree = "<group>";
 		};
+		D0AA000000000000000000A1 /* EventHubTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = EventHubTests;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +87,13 @@
 			files = (
 				D057008B2FFE985B0075C305 /* FirebaseAuth in Frameworks */,
 				D057008D2FFE985B0075C305 /* FirebaseFirestore in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D0AA000000000000000000A4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -99,6 +112,7 @@
 				D05700642FFE97430075C305 /* EventHub */,
 				D05700632FFE97430075C305 /* Products */,
 				D0E7B1043001936B00E449F2 /* Service */,
+				D0AA000000000000000000A1 /* EventHubTests */,
 			);
 			sourceTree = "<group>";
 		};
@@ -106,6 +120,7 @@
 			isa = PBXGroup;
 			children = (
 				D05700622FFE97430075C305 /* EventHub.app */,
+				D0AA000000000000000000A8 /* EventHubTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -178,6 +193,29 @@
 			productReference = D05700622FFE97430075C305 /* EventHub.app */;
 			productType = "com.apple.product-type.application";
 		};
+		D0AA000000000000000000A2 /* EventHubTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D0AA000000000000000000A9 /* Build configuration list for PBXNativeTarget "EventHubTests" */;
+			buildPhases = (
+				D0AA000000000000000000A3 /* Sources */,
+				D0AA000000000000000000A4 /* Frameworks */,
+				D0AA000000000000000000A5 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D0AA000000000000000000A6 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				D0AA000000000000000000A1 /* EventHubTests */,
+			);
+			name = EventHubTests;
+			packageProductDependencies = (
+			);
+			productName = EventHubTests;
+			productReference = D0AA000000000000000000A8 /* EventHubTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -190,6 +228,10 @@
 				TargetAttributes = {
 					D05700612FFE97430075C305 = {
 						CreatedOnToolsVersion = 26.3;
+					};
+					D0AA000000000000000000A2 = {
+						CreatedOnToolsVersion = 26.3;
+						TestTargetID = D05700612FFE97430075C305;
 					};
 				};
 			};
@@ -213,6 +255,7 @@
 			projectRoot = "";
 			targets = (
 				D05700612FFE97430075C305 /* EventHub */,
+				D0AA000000000000000000A2 /* EventHubTests */,
 			);
 		};
 /* End PBXProject section */
@@ -228,6 +271,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D0AA000000000000000000A5 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -239,7 +289,32 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D0AA000000000000000000A3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXContainerItemProxy section */
+		D0AA000000000000000000A7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D057005A2FFE97430075C305 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D05700612FFE97430075C305;
+			remoteInfo = EventHub;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXTargetDependency section */
+		D0AA000000000000000000A6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D05700612FFE97430075C305 /* EventHub */;
+			targetProxy = D0AA000000000000000000A7 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		D0A9241C30153F24008F98E4 /* Localizable.strings */ = {
@@ -452,6 +527,56 @@
 			};
 			name = Release;
 		};
+		D0AA000000000000000000B0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 8G5L26Y35C;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = First.comDakas.EventHubTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/EventHub.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/EventHub";
+			};
+			name = Debug;
+		};
+		D0AA000000000000000000B1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 8G5L26Y35C;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = First.comDakas.EventHubTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/EventHub.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/EventHub";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -469,6 +594,15 @@
 			buildConfigurations = (
 				D05700762FFE97470075C305 /* Debug */,
 				D05700772FFE97470075C305 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D0AA000000000000000000A9 /* Build configuration list for PBXNativeTarget "EventHubTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D0AA000000000000000000B0 /* Debug */,
+				D0AA000000000000000000B1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
