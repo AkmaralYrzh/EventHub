@@ -1,7 +1,7 @@
 import Foundation
 import Combine
 
-class LoginViewModel {
+final class LoginViewModel {
 
     // MARK: - Входные данные (что вводит пользователь)
     @Published var email: String = ""

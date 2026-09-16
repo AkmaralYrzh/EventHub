@@ -1,7 +1,7 @@
 import Foundation
 import Combine
 
-class SignUpViewModel {
+final class SignUpViewModel {
     
     @Published var firstName:String = ""
     @Published var lastName:String = ""

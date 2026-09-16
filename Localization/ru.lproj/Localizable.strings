@@ -69,3 +69,13 @@
 "home_title" = "Мероприятия недели";
 "city_subtitle" = "Мероприятия проходят по всему миру — выбери город, чтобы посмотреть, что там сейчас происходит.";
 "createevent_error_past_date" = "Дата начала уже прошла — выбери будущую дату";
+"auth_error_invalid_email" = "Некорректный email";
+"auth_error_wrong_password" = "Неверный email или пароль";
+"auth_error_user_not_found" = "Пользователь с таким email не найден";
+"auth_error_email_in_use" = "Этот email уже зарегистрирован";
+"auth_error_weak_password" = "Пароль слишком простой — минимум 6 символов";
+"auth_error_user_disabled" = "Аккаунт заблокирован";
+"auth_error_too_many_requests" = "Слишком много попыток — попробуй позже";
+"auth_error_network" = "Нет соединения с интернетом";
+"auth_error_profile_not_found" = "Профиль не найден";
+"auth_error_unknown" = "Что-то пошло не так — попробуй ещё раз";

@@ -1,7 +1,7 @@
 import UIKit
 import Combine
 
-class LoginViewController: UIViewController {
+final class LoginViewController: UIViewController {
 
     var onLoginSuccess: ((AuthUser) -> Void)?
     var onSignUpTap: (() -> Void)?
@@ -102,8 +102,8 @@ class LoginViewController: UIViewController {
             .receive(on: DispatchQueue.main)
             .sink(
                 receiveCompletion: { [weak self] completion in
-                    if case .failure = completion {
-                        self?.loginView.errorLabel.text = L("login_error")
+                    if case .failure(let error) = completion {
+                        self?.loginView.errorLabel.text = error.localizedDescription
                         self?.loginView.errorLabel.isHidden = false
                     }
                 },

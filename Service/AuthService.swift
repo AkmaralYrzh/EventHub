@@ -10,9 +10,28 @@ import Combine
 import FirebaseAuth
 import FirebaseFirestore
 
-class AuthService {
+final class AuthService {
 
     private let db = Firestore.firestore()
+
+    // MARK: - Перевод ошибок Firebase в AuthError
+
+    /// Единственное место, где приложение разбирает коды Firebase Auth.
+    static func mapError(_ error: Error) -> AuthError {
+        if let authError = error as? AuthError { return authError }
+        guard let code = AuthErrorCode(rawValue: (error as NSError).code) else { return .unknown }
+        switch code {
+        case .invalidEmail:                       return .invalidEmail
+        case .wrongPassword, .invalidCredential:  return .wrongPassword
+        case .userNotFound:                       return .userNotFound
+        case .emailAlreadyInUse:                  return .emailAlreadyInUse
+        case .weakPassword:                       return .weakPassword
+        case .userDisabled:                       return .userDisabled
+        case .tooManyRequests:                    return .tooManyRequests
+        case .networkError:                       return .network
+        default:                                  return .unknown
+        }
+    }
 
     var currentUser: AuthUser? {
         Auth.auth().currentUser
@@ -41,12 +60,11 @@ class AuthService {
             Future { promise in
                 Auth.auth().signIn(withEmail: email, password: password) { result, error in
                     if let error = error {
-                        promise(.failure(error))
+                        promise(.failure(AuthService.mapError(error)))
                     } else if let user = result?.user {
                         promise(.success(user as AuthUser))
                     } else {
-                        promise(.failure(NSError(domain: "AuthService", code: -1,
-                            userInfo: [NSLocalizedDescriptionKey: "Не удалось войти"])))
+                        promise(.failure(AuthError.unknown))
                     }
                 }
             }
@@ -59,12 +77,11 @@ class AuthService {
             Future { [weak self] promise in
                 Auth.auth().createUser(withEmail: profile.email, password: password) { result, error in
                     if let error = error {
-                        promise(.failure(error))
+                        promise(.failure(AuthService.mapError(error)))
                         return
                     }
                     guard let firebaseUser = result?.user else {
-                        promise(.failure(NSError(domain: "AuthService", code: -3,
-                            userInfo: [NSLocalizedDescriptionKey: "Не удалось создать пользователя"])))
+                        promise(.failure(AuthError.unknown))
                         return
                     }
 
@@ -78,7 +95,7 @@ class AuthService {
 
                     self?.db.collection("users").document(firebaseUser.uid).setData(newProfile.dictionary) { error in
                         if let error = error {
-                            promise(.failure(error))
+                            promise(.failure(AuthService.mapError(error)))
                         } else {
                             promise(.success(firebaseUser as AuthUser))
                         }
@@ -99,8 +116,7 @@ class AuthService {
                     }
                     guard let data = snapshot?.data(),
                           let profile = UserProfile(from: data) else {
-                        promise(.failure(NSError(domain: "AuthService", code: -2,
-                            userInfo: [NSLocalizedDescriptionKey: "Профиль не найден"])))
+                        promise(.failure(AuthError.profileNotFound))
                         return
                     }
                     promise(.success(profile))

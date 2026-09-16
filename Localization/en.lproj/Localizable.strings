@@ -69,3 +69,13 @@
 "home_title" = "Events of the week";
 "city_subtitle" = "Events happen all over the world — pick a city to see what is going on there.";
 "createevent_error_past_date" = "The start date has already passed — pick a future date";
+"auth_error_invalid_email" = "Invalid email address";
+"auth_error_wrong_password" = "Wrong email or password";
+"auth_error_user_not_found" = "No account with this email";
+"auth_error_email_in_use" = "This email is already registered";
+"auth_error_weak_password" = "Password is too weak — at least 6 characters";
+"auth_error_user_disabled" = "This account has been disabled";
+"auth_error_too_many_requests" = "Too many attempts — try again later";
+"auth_error_network" = "No internet connection";
+"auth_error_profile_not_found" = "Profile not found";
+"auth_error_unknown" = "Something went wrong — please try again";

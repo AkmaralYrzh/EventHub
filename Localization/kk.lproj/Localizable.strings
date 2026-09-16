@@ -70,3 +70,13 @@
 "home_title" = "Апта іс-шаралары";
 "city_subtitle" = "Іс-шаралар бүкіл әлемде өтеді — қай қалада не болып жатқанын көру үшін қаланы таңдаңыз.";
 "createevent_error_past_date" = "Басталу күні өтіп кетті — болашақ күнді таңдаңыз";
+"auth_error_invalid_email" = "Email дұрыс емес";
+"auth_error_wrong_password" = "Email немесе құпия сөз қате";
+"auth_error_user_not_found" = "Мұндай email-мен пайдаланушы табылмады";
+"auth_error_email_in_use" = "Бұл email тіркелген";
+"auth_error_weak_password" = "Құпия сөз тым қарапайым — кемінде 6 таңба";
+"auth_error_user_disabled" = "Аккаунт бұғатталған";
+"auth_error_too_many_requests" = "Тым көп әрекет — кейінірек қайталаңыз";
+"auth_error_network" = "Интернет байланысы жоқ";
+"auth_error_profile_not_found" = "Профиль табылмады";
+"auth_error_unknown" = "Бірдеңе дұрыс болмады — қайталап көріңіз";
