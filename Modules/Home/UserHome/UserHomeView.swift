@@ -26,6 +26,7 @@ final class UserHomeView: UIView {
     let categoryStackView = UIStackView()
 
     let eventsCollectionView: UICollectionView
+    let stateView = UiStateView()
 
     let miniListStackView = UIStackView()
 
@@ -88,7 +89,9 @@ final class UserHomeView: UIView {
         headerStack.isLayoutMarginsRelativeArrangement = true
         headerStack.directionalLayoutMargins = .init(top: 0, leading: 20, bottom: 0, trailing: 20)
 
-        [headerStack, categoryScrollView, eventsCollectionView, miniListStackView].forEach {
+        stateView.translatesAutoresizingMaskIntoConstraints = false
+
+        [headerStack, categoryScrollView, stateView, eventsCollectionView, miniListStackView].forEach {
             contentStackView.addArrangedSubview($0)
         }
 

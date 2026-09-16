@@ -18,9 +18,6 @@ final class UserHomeViewController: UIViewController {
         ("food", "", L("category_food"))
     ]
 
-    private var selectedCategoryId: String = "all"
-    private var selectedCityId: String = "all"
-    private var allEvents: [EventModel] = []
     private var filteredEvents: [EventModel] = []
 
     init(viewModel: UserHomeViewModel) {
@@ -58,7 +55,7 @@ final class UserHomeViewController: UIViewController {
     private func setupCategoryChips() {
         categories.forEach { category in
             let chip = UiCategoryChip(categoryId: category.id, icon: category.icon, title: category.title)
-            chip.isSelected = category.id == selectedCategoryId
+            chip.isSelected = category.id == viewModel.selectedCategoryId
             chip.tapPublisher
                 .sink { [weak self] in
                     self?.selectCategory(category.id)
@@ -69,16 +66,14 @@ final class UserHomeViewController: UIViewController {
     }
 
     func setSelectedCity(_ id: String) {
-        selectedCityId = id
-        applyFilter()
+        viewModel.selectedCityId = id
     }
 
     private func selectCategory(_ id: String) {
-        selectedCategoryId = id
+        viewModel.selectedCategoryId = id
         homeView.categoryStackView.arrangedSubviews
             .compactMap { $0 as? UiCategoryChip }
             .forEach { $0.isSelected = $0.categoryId == id }
-        applyFilter()
     }
 
     private func setupCollectionView() {
@@ -87,12 +82,25 @@ final class UserHomeViewController: UIViewController {
     }
 
     private func bindViewModel() {
-        viewModel.$events
+        viewModel.$filteredEvents
             .receive(on: DispatchQueue.main)
             .sink { [weak self] events in
-                self?.allEvents = events
-                self?.applyFilter()
+                self?.filteredEvents = events
+                self?.homeView.eventsCollectionView.reloadData()
+                self?.updateMiniList()
             }
+            .store(in: &cancellables)
+
+        viewModel.$state
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] state in
+                self?.homeView.stateView.render(state)
+                self?.homeView.eventsCollectionView.isHidden = (state != .loaded)
+            }
+            .store(in: &cancellables)
+
+        homeView.stateView.retryPublisher
+            .sink { [weak self] in self?.viewModel.fetchEvents() }
             .store(in: &cancellables)
 
         viewModel.$favoriteEventIds
@@ -102,16 +110,6 @@ final class UserHomeViewController: UIViewController {
                 self?.updateMiniList()
             }
             .store(in: &cancellables)
-    }
-
-    private func applyFilter() {
-        filteredEvents = allEvents.filter { event in
-            (selectedCategoryId == "all" || event.category == selectedCategoryId) &&
-            (selectedCityId == "all" || event.city == selectedCityId)
-        }
-
-        homeView.eventsCollectionView.reloadData()
-        updateMiniList()
     }
 
     private func updateMiniList() {

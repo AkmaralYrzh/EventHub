@@ -46,6 +46,17 @@ final class FavoritesViewController: UIViewController {
                 self?.updateList(events)
             }
             .store(in: &cancellables)
+
+        viewModel.$state
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] state in
+                self?.favoritesView.stateView.render(state)
+            }
+            .store(in: &cancellables)
+
+        favoritesView.stateView.retryPublisher
+            .sink { [weak self] in self?.viewModel.refresh() }
+            .store(in: &cancellables)
     }
 
     private func updateList(_ events: [EventModel]) {
@@ -53,9 +64,6 @@ final class FavoritesViewController: UIViewController {
             favoritesView.eventsStackView.removeArrangedSubview($0)
             $0.removeFromSuperview()
         }
-
-        favoritesView.emptyLabel.isHidden = !events.isEmpty
-        favoritesView.emptyLabel.text = L("favorites_empty")
 
         events.forEach { event in
             let card = UiEventCard()

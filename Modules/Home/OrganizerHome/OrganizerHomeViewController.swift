@@ -43,21 +43,15 @@ final class OrganizerHomeViewController: UIViewController {
             }
             .store(in: &cancellables)
 
-        viewModel.$isLoading
+        viewModel.$state
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] isLoading in
-                isLoading
-                    ? self?.organizerView.loadingIndicator.startAnimating()
-                    : self?.organizerView.loadingIndicator.stopAnimating()
+            .sink { [weak self] state in
+                self?.organizerView.stateView.render(state)
             }
             .store(in: &cancellables)
 
-        viewModel.$errorMessage
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] message in
-                self?.organizerView.errorLabel.text = message
-                self?.organizerView.errorLabel.isHidden = (message == nil)
-            }
+        organizerView.stateView.retryPublisher
+            .sink { [weak self] in self?.viewModel.fetchMyEvents() }
             .store(in: &cancellables)
     }
 

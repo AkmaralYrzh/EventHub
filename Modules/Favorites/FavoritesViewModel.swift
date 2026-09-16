@@ -1,11 +1,10 @@
 import Foundation
 import Combine
 
-class FavoritesViewModel {
+final class FavoritesViewModel {
 
     @Published private(set) var events: [EventModel] = []
-    @Published private(set) var isLoading: Bool = false
-    @Published private(set) var errorMessage: String?
+    @Published private(set) var state: ListState = .loading
 
     private let eventService = EventService()
     private let authService = AuthService()
@@ -18,7 +17,7 @@ class FavoritesViewModel {
 
     func refresh() {
         guard let uid = authService.currentUserId else { return }
-        isLoading = true
+        state = .loading
 
         authService.fetchUserProfile(uid: uid)
             .flatMap { [eventService] profile -> AnyPublisher<([EventModel], Set<String>), Error> in
@@ -29,15 +28,16 @@ class FavoritesViewModel {
             .receive(on: DispatchQueue.main)
             .sink(
                 receiveCompletion: { [weak self] completion in
-                    self?.isLoading = false
                     if case .failure(let error) = completion {
-                        self?.errorMessage = error.localizedDescription
+                        self?.state = .error(message: error.localizedDescription)
                     }
                 },
                 receiveValue: { [weak self] events, favoriteIds in
-                    self?.events = events
+                    let favorites = events
                         .filter { favoriteIds.contains($0.id) }
                         .sorted { $0.startDate < $1.startDate }
+                    self?.events = favorites
+                    self?.state = ListState.from(favorites, emptyMessage: L("favorites_empty"))
                 }
             )
             .store(in: &cancellables)
@@ -46,6 +46,7 @@ class FavoritesViewModel {
     func removeFavorite(eventId: String) {
         guard let uid = authService.currentUserId else { return }
         events.removeAll { $0.id == eventId }
+        state = ListState.from(events, emptyMessage: L("favorites_empty"))
         favoriteCancellable = authService.toggleFavorite(uid: uid, eventId: eventId, isFavorite: false)
             .sink(receiveCompletion: { _ in }, receiveValue: { _ in })
     }

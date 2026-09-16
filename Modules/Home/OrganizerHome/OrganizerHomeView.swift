@@ -4,8 +4,7 @@ final class OrganizerHomeView: UIView {
 
     let createEventButton = UIButton(type: .system)
     let eventsStackView = UIStackView()
-    let loadingIndicator = UIActivityIndicatorView(style: .medium)
-    let errorLabel = UILabel()
+    let stateView = UiStateView()
 
     private let scrollView = UIScrollView()
     private let contentStackView = UIStackView()
@@ -41,16 +40,9 @@ final class OrganizerHomeView: UIView {
         eventsStackView.spacing = 10
         eventsStackView.translatesAutoresizingMaskIntoConstraints = false
 
-        loadingIndicator.hidesWhenStopped = true
-        loadingIndicator.color = .eventHubSecondary
+        stateView.translatesAutoresizingMaskIntoConstraints = false
 
-        errorLabel.textColor = .eventHubError
-        errorLabel.font = .systemFont(ofSize: 13)
-        errorLabel.numberOfLines = 0
-        errorLabel.textAlignment = .center
-        errorLabel.isHidden = true
-
-        [createEventButton, loadingIndicator, errorLabel, eventsStackView].forEach {
+        [createEventButton, stateView, eventsStackView].forEach {
             contentStackView.addArrangedSubview($0)
         }
 

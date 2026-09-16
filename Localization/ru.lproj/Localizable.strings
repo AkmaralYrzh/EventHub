@@ -79,3 +79,7 @@
 "auth_error_network" = "Нет соединения с интернетом";
 "auth_error_profile_not_found" = "Профиль не найден";
 "auth_error_unknown" = "Что-то пошло не так — попробуй ещё раз";
+"common_retry" = "Повторить";
+"home_empty" = "Мероприятий пока нет — загляни позже";
+"home_empty_filtered" = "По этому фильтру ничего не нашлось";
+"organizer_empty" = "У тебя пока нет мероприятий — создай первое";

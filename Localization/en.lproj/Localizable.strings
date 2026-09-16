@@ -79,3 +79,7 @@
 "auth_error_network" = "No internet connection";
 "auth_error_profile_not_found" = "Profile not found";
 "auth_error_unknown" = "Something went wrong — please try again";
+"common_retry" = "Retry";
+"home_empty" = "No events yet — check back later";
+"home_empty_filtered" = "Nothing matches this filter";
+"organizer_empty" = "You have no events yet — create your first one";

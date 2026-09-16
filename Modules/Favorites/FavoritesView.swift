@@ -11,7 +11,7 @@ final class FavoritesView: UIView {
     }()
 
     let eventsStackView = UIStackView()
-    let emptyLabel = UILabel()
+    let stateView = UiStateView()
 
     private let scrollView = UIScrollView()
     private let contentStackView = UIStackView()
@@ -37,17 +37,11 @@ final class FavoritesView: UIView {
         contentStackView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.addSubview(contentStackView)
 
-        emptyLabel.textColor = .eventHubSecondary
-        emptyLabel.font = .systemFont(ofSize: 15)
-        emptyLabel.textAlignment = .center
-        emptyLabel.numberOfLines = 0
-        emptyLabel.isHidden = true
-
         eventsStackView.axis = .vertical
         eventsStackView.spacing = 10
         eventsStackView.translatesAutoresizingMaskIntoConstraints = false
 
-        [titleLabel, emptyLabel, eventsStackView].forEach {
+        [titleLabel, stateView, eventsStackView].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             contentStackView.addArrangedSubview($0)
         }
