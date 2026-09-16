@@ -64,12 +64,8 @@ final class ProfileViewController: UIViewController {
 
         let isOrganizer = viewModel.userRole == .organizer
         profileView.roleBadge.text = "  \(isOrganizer ? L("profile_role_organizer") : L("profile_role_user"))  "
-        profileView.roleBadge.backgroundColor = isOrganizer
-            ? UIColor(red: 0.66, green: 0.55, blue: 0.98, alpha: 1)
-            : UIColor(red: 0.50, green: 0.78, blue: 0.66, alpha: 1)
-        profileView.roleBadge.textColor = isOrganizer
-            ? UIColor(red: 0.11, green: 0.07, blue: 0.20, alpha: 1)
-            : UIColor(red: 0.05, green: 0.14, blue: 0.09, alpha: 1)
+        profileView.roleBadge.backgroundColor = isOrganizer ? .eventHubRoleOrganizerBackground : .eventHubRoleUserBackground
+        profileView.roleBadge.textColor = isOrganizer ? .eventHubRoleOrganizerText : .eventHubRoleUserText
     }
 
     private func setupTabsControl() {
