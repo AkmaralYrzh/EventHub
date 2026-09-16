@@ -100,9 +100,8 @@ final class ProfileViewController: UIViewController {
 
         let events = viewModel.visibleEvents
         profileView.emptyLabel.isHidden = !events.isEmpty
-        profileView.emptyLabel.text = L("profile_events_empty")
+        profileView.emptyLabel.text = viewModel.userRole == .organizer ? L("organizer_empty") : L("profile_events_empty")
 
-        let isOrganizer = viewModel.userRole == .organizer
         events.forEach { event in
             let card = UiEventCard()
             card.configure(with: event)
@@ -110,13 +109,8 @@ final class ProfileViewController: UIViewController {
             card.tapPublisher
                 .sink { [weak self] in self?.onEventTap?(event) }
                 .store(in: &cardCancellables)
-            card.setFavoriteButtonHidden(isOrganizer)
-            if !isOrganizer {
-                card.setFavorite(true)
-                card.favoriteTapPublisher
-                    .sink { [weak self] in self?.viewModel.removeFavorite(eventId: event.id) }
-                    .store(in: &cardCancellables)
-            }
+            // В профиле — свои события (организатор) или свои записи (посетитель); сердечко здесь не нужно.
+            card.setFavoriteButtonHidden(true)
             profileView.eventsStackView.addArrangedSubview(card)
         }
     }

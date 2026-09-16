@@ -47,7 +47,7 @@
 "login_welcome_back" = "Қайта көргеніміз қуаныш, %@!";
 "profile_tab_upcoming" = "Алдағы";
 "profile_tab_past" = "Өткен";
-"profile_events_empty" = "Әзірге ештеңе жоқ";
+"profile_events_empty" = "Әзірге ештеңе жоқ — таспадан іс-шараға тіркеліңіз";
 "settings_title" = "Параметрлер";
 "settings_dark_theme" = "Қараңғы тақырып";
 "settings_logout" = "Шығу";
@@ -100,3 +100,7 @@
 "common_ok" = "OK";
 "common_cancel" = "Болдырмау";
 "common_open_settings" = "Параметрлерді ашу";
+"eventdetails_participants" = "Тіркелгендер: %d";
+"eventdetails_join" = "Тіркелу";
+"eventdetails_leave" = "Тіркелуден бас тарту";
+"eventdetails_past" = "Іс-шара өтіп кетті";

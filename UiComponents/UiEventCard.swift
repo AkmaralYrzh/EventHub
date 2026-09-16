@@ -92,7 +92,7 @@ final class UiEventCard: UIControl {
 
     func configure(with event: EventModel) {
         titleLabel.text = event.title
-        metaLabel.text = "\(event.location)"
+        metaLabel.text = "\(event.location) · \(event.startDate.eventHubFormatted)"
         priceLabel.text = event.isFree ? "  \(L("event_free"))  " : "  \(event.price)  "
 
         let colors = EventCovers.colors(for: event.coverImageName)

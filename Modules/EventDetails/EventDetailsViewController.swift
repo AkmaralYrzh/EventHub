@@ -1,9 +1,11 @@
 import UIKit
+import Combine
 
 final class EventDetailsViewController: UIViewController {
 
     private let detailsView = EventDetailsView()
     private let viewModel: EventDetailsViewModel
+    private var cancellables = Set<AnyCancellable>()
 
     init(viewModel: EventDetailsViewModel) {
         self.viewModel = viewModel
@@ -20,6 +22,46 @@ final class EventDetailsViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        detailsView.configure(with: viewModel.event)
+        bindViewModel()
+        detailsView.joinButton.addAction(UIAction { [weak self] _ in
+            self?.viewModel.toggleJoin()
+        }, for: .touchUpInside)
+    }
+
+    // MARK: - Связывание View и ViewModel
+    private func bindViewModel() {
+        viewModel.$event
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] event in
+                self?.detailsView.configure(with: event)
+                self?.updateJoinControls()
+            }
+            .store(in: &cancellables)
+
+        viewModel.$isJoined.combineLatest(viewModel.$isBusy)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in self?.updateJoinControls() }
+            .store(in: &cancellables)
+
+        viewModel.$errorMessage
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] message in
+                self?.detailsView.errorLabel.text = message
+                self?.detailsView.errorLabel.isHidden = (message == nil)
+            }
+            .store(in: &cancellables)
+    }
+
+    private func updateJoinControls() {
+        if viewModel.canJoin {
+            detailsView.setJoinState(isJoined: viewModel.isJoined, isBusy: viewModel.isBusy)
+        } else if !viewModel.event.isUpcoming() {
+            detailsView.setStatus(L("eventdetails_past"))
+        } else if UserDefaults.standard.userRole == .organizer {
+            // Организатору показываем только счётчик участников — он уже есть в списке информации.
+            detailsView.setStatus(nil)
+        } else {
+            detailsView.setStatus(nil)
+        }
     }
 }

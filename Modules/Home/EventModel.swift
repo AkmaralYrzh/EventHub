@@ -1,6 +1,6 @@
 import Foundation
 
-struct EventModel {
+struct EventModel: Equatable {
     let id: String
     let title: String
     let description: String
@@ -13,10 +13,12 @@ struct EventModel {
     let price: String
     let isFree: Bool
     let coverImageName: String
+    /// uid пользователей, записавшихся на мероприятие.
+    let participantIds: [String]
 
     init(id: String, title: String, description: String, startDate: Date, location: String, city: String,
          organizerId: String, organizerName: String, category: String, price: String,
-         isFree: Bool, coverImageName: String) {
+         isFree: Bool, coverImageName: String, participantIds: [String] = []) {
         self.id = id
         self.title = title
         self.description = description
@@ -29,6 +31,7 @@ struct EventModel {
         self.price = price
         self.isFree = isFree
         self.coverImageName = coverImageName
+        self.participantIds = participantIds
     }
 
     init?(id: String, from dict: [String: Any]) {
@@ -57,6 +60,7 @@ struct EventModel {
         self.price = price
         self.isFree = isFree
         self.coverImageName = coverImageName
+        self.participantIds = dict["participantIds"] as? [String] ?? []
     }
 
     var dictionary: [String: Any] {
@@ -71,7 +75,31 @@ struct EventModel {
             "category": category,
             "price": price,
             "isFree": isFree,
-            "coverImageName": coverImageName
+            "coverImageName": coverImageName,
+            "participantIds": participantIds
         ]
+    }
+
+    // MARK: - Участие
+
+    var participantsCount: Int { participantIds.count }
+
+    func isJoined(by uid: String?) -> Bool {
+        guard let uid else { return false }
+        return participantIds.contains(uid)
+    }
+
+    func isUpcoming(now: Date = Date()) -> Bool {
+        startDate > now
+    }
+
+    /// Копия с изменённым списком участников — для оптимистичного обновления без похода в базу.
+    func withParticipation(uid: String, isJoined: Bool) -> EventModel {
+        var ids = participantIds.filter { $0 != uid }
+        if isJoined { ids.append(uid) }
+        return EventModel(id: id, title: title, description: description, startDate: startDate,
+                          location: location, city: city, organizerId: organizerId,
+                          organizerName: organizerName, category: category, price: price,
+                          isFree: isFree, coverImageName: coverImageName, participantIds: ids)
     }
 }
