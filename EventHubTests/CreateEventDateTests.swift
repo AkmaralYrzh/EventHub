@@ -16,4 +16,13 @@ final class CreateEventDateTests: XCTestCase {
         XCTAssertFalse(CreateEventViewModel.isValidStartDate(now, now: now))
         XCTAssertFalse(CreateEventViewModel.isValidStartDate(now.addingTimeInterval(-1), now: now))
     }
+
+    func test_parseCapacity() {
+        XCTAssertEqual(CreateEventViewModel.parseCapacity(""), .some(nil))
+        XCTAssertEqual(CreateEventViewModel.parseCapacity("  "), .some(nil))
+        XCTAssertEqual(CreateEventViewModel.parseCapacity("25"), .some(25))
+        XCTAssertNil(CreateEventViewModel.parseCapacity("0"))
+        XCTAssertNil(CreateEventViewModel.parseCapacity("-3"))
+        XCTAssertNil(CreateEventViewModel.parseCapacity("abc"))
+    }
 }

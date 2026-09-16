@@ -83,4 +83,28 @@ final class EventModelTests: XCTestCase {
         XCTAssertTrue(event.isUpcoming(now: before))
         XCTAssertFalse(event.isUpcoming(now: after))
     }
+
+    func test_capacity_spotsLeftAndIsFull() {
+        var dict = validDict
+        dict["capacity"] = 2
+        let full = EventModel(id: "e1", from: dict)!
+        dict["capacity"] = 5
+        let open = EventModel(id: "e2", from: dict)!
+        let unlimited = EventModel(id: "e3", from: validDict)!
+
+        XCTAssertEqual(full.spotsLeft, 0)
+        XCTAssertTrue(full.isFull)
+        XCTAssertEqual(open.spotsLeft, 3)
+        XCTAssertFalse(open.isFull)
+        XCTAssertNil(unlimited.spotsLeft)
+        XCTAssertFalse(unlimited.isFull)
+    }
+
+    func test_capacity_survivesRoundTrip() {
+        var dict = validDict
+        dict["capacity"] = 10
+        let event = EventModel(id: "e1", from: dict)!
+
+        XCTAssertEqual(EventModel(id: "e1", from: event.dictionary)?.capacity, 10)
+    }
 }

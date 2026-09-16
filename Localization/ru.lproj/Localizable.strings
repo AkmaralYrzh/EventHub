@@ -103,3 +103,9 @@
 "eventdetails_join" = "Записаться";
 "eventdetails_leave" = "Отменить запись";
 "eventdetails_past" = "Мероприятие уже прошло";
+"createevent_capacity_placeholder" = "Количество мест (необязательно)";
+"createevent_error_capacity" = "Количество мест — целое число больше нуля";
+"eventdetails_participants_of" = "Записалось: %d из %d";
+"eventdetails_full" = "Мест больше нет";
+"event_error_full" = "Мест больше нет — кто-то успел раньше";
+"event_error_not_found" = "Мероприятие не найдено — возможно, его удалили";

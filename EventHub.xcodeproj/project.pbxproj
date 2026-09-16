@@ -15,6 +15,16 @@
 		D0A9242630153F24008F98E4 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = D0A9241F30153F24008F98E4 /* Localizable.strings */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		D0AA000000000000000000A7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D057005A2FFE97430075C305 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D05700612FFE97430075C305;
+			remoteInfo = EventHub;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		D05700622FFE97430075C305 /* EventHub.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EventHub.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0A9240930153BE1008F98E4 /* LocalizationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizationManager.swift; sourceTree = "<group>"; };
@@ -68,14 +78,14 @@
 			path = Modules;
 			sourceTree = "<group>";
 		};
-		D0E7B1043001936B00E449F2 /* Service */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = Service;
-			sourceTree = "<group>";
-		};
 		D0AA000000000000000000A1 /* EventHubTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = EventHubTests;
+			sourceTree = "<group>";
+		};
+		D0E7B1043001936B00E449F2 /* Service */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Service;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -297,16 +307,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXContainerItemProxy section */
-		D0AA000000000000000000A7 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = D057005A2FFE97430075C305 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = D05700612FFE97430075C305;
-			remoteInfo = EventHub;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXTargetDependency section */
 		D0AA000000000000000000A6 /* PBXTargetDependency */ = {

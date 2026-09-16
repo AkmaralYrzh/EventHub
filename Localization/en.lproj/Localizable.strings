@@ -103,3 +103,9 @@
 "eventdetails_join" = "Join event";
 "eventdetails_leave" = "Cancel registration";
 "eventdetails_past" = "This event has already taken place";
+"createevent_capacity_placeholder" = "Number of spots (optional)";
+"createevent_error_capacity" = "Number of spots must be a whole number above zero";
+"eventdetails_participants_of" = "Going: %d of %d";
+"eventdetails_full" = "No spots left";
+"event_error_full" = "No spots left — someone got there first";
+"event_error_not_found" = "Event not found — it may have been deleted";

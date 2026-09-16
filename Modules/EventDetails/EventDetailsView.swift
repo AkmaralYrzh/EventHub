@@ -128,7 +128,11 @@ final class EventDetailsView: UIView {
         dateLabel.text = event.startDate.eventHubFormatted
         locationLabel.text = event.location
         organizerLabel.text = String(format: L("eventdetails_organizer"), event.organizerName)
-        participantsLabel.text = String(format: L("eventdetails_participants"), event.participantsCount)
+        if let capacity = event.capacity {
+            participantsLabel.text = String(format: L("eventdetails_participants_of"), event.participantsCount, capacity)
+        } else {
+            participantsLabel.text = String(format: L("eventdetails_participants"), event.participantsCount)
+        }
         priceLabel.text = event.isFree ? L("event_free") : event.price
         descriptionLabel.text = event.description
     }

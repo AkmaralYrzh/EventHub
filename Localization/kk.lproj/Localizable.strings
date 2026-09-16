@@ -104,3 +104,9 @@
 "eventdetails_join" = "Тіркелу";
 "eventdetails_leave" = "Тіркелуден бас тарту";
 "eventdetails_past" = "Іс-шара өтіп кетті";
+"createevent_capacity_placeholder" = "Орын саны (міндетті емес)";
+"createevent_error_capacity" = "Орын саны — нөлден үлкен бүтін сан";
+"eventdetails_participants_of" = "Тіркелгендер: %d / %d";
+"eventdetails_full" = "Орын қалмады";
+"event_error_full" = "Орын қалмады — біреу бұрын үлгерді";
+"event_error_not_found" = "Іс-шара табылмады — жойылған болуы мүмкін";

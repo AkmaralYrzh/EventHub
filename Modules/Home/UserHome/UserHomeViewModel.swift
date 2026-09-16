@@ -56,7 +56,9 @@ final class UserHomeViewModel {
                 case .loading:                 return .loading
                 case .failed(let message):     return .error(message: message)
                 case .loaded:
-                    if events.isEmpty { return .empty(message: L("home_empty")) }
+                    if events.isEmpty || !events.contains(where: { $0.isUpcoming() }) {
+                        return .empty(message: L("home_empty"))
+                    }
                     if filtered.isEmpty { return .empty(message: L("home_empty_filtered")) }
                     return .loaded
                 }
@@ -65,8 +67,10 @@ final class UserHomeViewModel {
             .assign(to: &$state)
     }
 
-    static func filter(_ events: [EventModel], categoryId: String, cityId: String) -> [EventModel] {
+    /// В ленте только предстоящие события; прошедшие остаются в профиле («Прошедшие»).
+    static func filter(_ events: [EventModel], categoryId: String, cityId: String, now: Date = Date()) -> [EventModel] {
         events.filter { event in
+            event.isUpcoming(now: now) &&
             (categoryId == allFilterId || event.category == categoryId) &&
             (cityId == allFilterId || event.city == cityId)
         }

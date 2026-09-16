@@ -7,6 +7,7 @@ final class CreateEventView: UIView {
     let cityControl = UISegmentedControl()
     let categoryControl = UISegmentedControl()
     let priceField = UITextField()
+    let capacityField = UITextField()
     let freeSwitch = UISwitch()
     let freeLabel = UILabel()
     let createButton = UIButton(type: .system)
@@ -124,7 +125,7 @@ final class CreateEventView: UIView {
         dateRow.axis = .horizontal
         dateRow.distribution = .equalSpacing
 
-        [titleField, descriptionField, locationField, priceField].forEach { field in
+        [titleField, descriptionField, locationField, priceField, capacityField].forEach { field in
             field.borderStyle = .roundedRect
             field.backgroundColor = .eventHubGlassFill
             field.textColor = .eventHubTextPrimary
@@ -137,6 +138,8 @@ final class CreateEventView: UIView {
         locationField.placeholder = L("createevent_location_placeholder")
         priceField.placeholder = L("createevent_price_placeholder")
         priceField.keyboardType = .decimalPad
+        capacityField.placeholder = L("createevent_capacity_placeholder")
+        capacityField.keyboardType = .numberPad
         [titleField, descriptionField, locationField].forEach { $0.returnKeyType = .done }
 
         cityControl.insertSegment(withTitle: L("city_almaty"), at: 0, animated: false)
@@ -171,7 +174,7 @@ final class CreateEventView: UIView {
         errorLabel.isHidden = true
 
         [coverPreviewView, swatchesScroll, dateRow, titleField, descriptionField, locationField,
-         cityControl, categoryControl, priceField, freeStack, errorLabel, createButton].forEach {
+         cityControl, categoryControl, priceField, freeStack, capacityField, errorLabel, createButton].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             contentStackView.addArrangedSubview($0)
         }

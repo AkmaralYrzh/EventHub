@@ -71,7 +71,7 @@ final class EventService {
                         return
                     }
                     guard let data = snapshot?.data(), let event = EventModel(id: id, from: data) else {
-                        promise(.failure(AuthError.unknown))
+                        promise(.failure(EventError.notFound))
                         return
                     }
                     promise(.success(event))
@@ -81,18 +81,39 @@ final class EventService {
         .eraseToAnyPublisher()
     }
 
-    /// arrayUnion / arrayRemove — атомарно, как и для избранного.
+    /// Запись идёт через транзакцию: читаем актуальный список, проверяем лимит, пишем.
+    /// Так два человека не займут последнее место одновременно. Отмена — просто arrayRemove.
     func setParticipation(eventId: String, uid: String, isJoined: Bool) -> AnyPublisher<Void, Error> {
         Deferred {
             Future { [weak self] promise in
-                let update: [String: Any] = [
-                    "participantIds": isJoined
-                        ? FieldValue.arrayUnion([uid])
-                        : FieldValue.arrayRemove([uid])
-                ]
-                self?.db.collection("events").document(eventId).updateData(update) { error in
-                    if let error = error {
-                        promise(.failure(error))
+                guard let self else { return }
+                let ref = self.db.collection("events").document(eventId)
+
+                guard isJoined else {
+                    ref.updateData(["participantIds": FieldValue.arrayRemove([uid])]) { error in
+                        error.map { promise(.failure($0)) } ?? promise(.success(()))
+                    }
+                    return
+                }
+
+                self.db.runTransaction({ transaction, errorPointer in
+                    do {
+                        let snapshot = try transaction.getDocument(ref)
+                        let ids = snapshot.data()?["participantIds"] as? [String] ?? []
+                        let capacity = snapshot.data()?["capacity"] as? Int
+                        if ids.contains(uid) { return nil }
+                        if let capacity, ids.count >= capacity {
+                            errorPointer?.pointee = EventError.full as NSError
+                            return nil
+                        }
+                        transaction.updateData(["participantIds": FieldValue.arrayUnion([uid])], forDocument: ref)
+                    } catch let error as NSError {
+                        errorPointer?.pointee = error
+                    }
+                    return nil
+                }) { _, error in
+                    if let error {
+                        promise(.failure(EventError.full.matches(error) ? EventError.full : error))
                     } else {
                         promise(.success(()))
                     }

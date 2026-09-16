@@ -14,10 +14,13 @@ final class CreateEventViewModel {
     @Published var isFree: Bool = false
     @Published var startDate: Date = CreateEventViewModel.defaultStartDate()
     @Published var coverImageName: String = EventCovers.templates[0].id
+    /// Текст поля «Количество мест»; пусто — без ограничения.
+    @Published var capacityText: String = ""
 
     // MARK: - Выходные данные (что вычисляет ViewModel)
     @Published private(set) var isReadyToCreate: Bool = false
     @Published private(set) var isDateValid: Bool = true
+    @Published private(set) var isCapacityValid: Bool = true
     @Published private(set) var errorMessage: String?
 
     // MARK: - Внутреннее (сервисы и подписки)
@@ -35,12 +38,29 @@ final class CreateEventViewModel {
             .removeDuplicates()
             .assign(to: &$isDateValid)
 
+        $capacityText
+            .map { Self.parseCapacity($0) != nil }
+            .removeDuplicates()
+            .assign(to: &$isCapacityValid)
+
         Publishers.CombineLatest4($title, $description, $location, $isDateValid)
-            .map { title, description, location, isDateValid in
-                !title.isEmpty && !description.isEmpty && !location.isEmpty && isDateValid
+            .combineLatest($isCapacityValid)
+            .map { fields, isCapacityValid in
+                let (title, description, location, isDateValid) = fields
+                return !title.isEmpty && !description.isEmpty && !location.isEmpty && isDateValid && isCapacityValid
             }
             .removeDuplicates()
             .assign(to: &$isReadyToCreate)
+    }
+
+    // MARK: - Количество мест
+
+    /// Пустая строка → .some(nil) (без лимита); положительное число → .some(n); иначе nil (ошибка ввода).
+    static func parseCapacity(_ text: String) -> Int?? {
+        let trimmed = text.trimmingCharacters(in: .whitespaces)
+        if trimmed.isEmpty { return .some(nil) }
+        guard let value = Int(trimmed), value > 0 else { return nil }
+        return .some(value)
     }
 
     // MARK: - Дата
@@ -82,7 +102,8 @@ final class CreateEventViewModel {
             category: category,
             price: price,
             isFree: isFree,
-            coverImageName: coverImageName
+            coverImageName: coverImageName,
+            capacity: Self.parseCapacity(capacityText) ?? nil
         )
 
         return eventService.createEvent(event)

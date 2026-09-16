@@ -53,7 +53,9 @@ final class EventDetailsViewController: UIViewController {
     }
 
     private func updateJoinControls() {
-        if viewModel.canJoin {
+        if viewModel.canJoin, viewModel.event.isFull, !viewModel.isJoined {
+            detailsView.setStatus(L("eventdetails_full"))
+        } else if viewModel.canJoin {
             detailsView.setJoinState(isJoined: viewModel.isJoined, isBusy: viewModel.isBusy)
         } else if !viewModel.event.isUpcoming() {
             detailsView.setStatus(L("eventdetails_past"))

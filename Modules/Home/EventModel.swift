@@ -15,10 +15,12 @@ struct EventModel: Equatable {
     let coverImageName: String
     /// uid пользователей, записавшихся на мероприятие.
     let participantIds: [String]
+    /// Максимум участников; nil — без ограничения.
+    let capacity: Int?
 
     init(id: String, title: String, description: String, startDate: Date, location: String, city: String,
          organizerId: String, organizerName: String, category: String, price: String,
-         isFree: Bool, coverImageName: String, participantIds: [String] = []) {
+         isFree: Bool, coverImageName: String, participantIds: [String] = [], capacity: Int? = nil) {
         self.id = id
         self.title = title
         self.description = description
@@ -32,6 +34,7 @@ struct EventModel: Equatable {
         self.isFree = isFree
         self.coverImageName = coverImageName
         self.participantIds = participantIds
+        self.capacity = capacity
     }
 
     init?(id: String, from dict: [String: Any]) {
@@ -61,6 +64,7 @@ struct EventModel: Equatable {
         self.isFree = isFree
         self.coverImageName = coverImageName
         self.participantIds = dict["participantIds"] as? [String] ?? []
+        self.capacity = dict["capacity"] as? Int
     }
 
     var dictionary: [String: Any] {
@@ -76,13 +80,23 @@ struct EventModel: Equatable {
             "price": price,
             "isFree": isFree,
             "coverImageName": coverImageName,
-            "participantIds": participantIds
+            "participantIds": participantIds,
+            "capacity": capacity as Any
         ]
     }
 
     // MARK: - Участие
 
     var participantsCount: Int { participantIds.count }
+
+    /// Сколько мест осталось; nil — мест не ограничено.
+    var spotsLeft: Int? {
+        capacity.map { max(0, $0 - participantsCount) }
+    }
+
+    var isFull: Bool {
+        spotsLeft == 0
+    }
 
     func isJoined(by uid: String?) -> Bool {
         guard let uid else { return false }
@@ -100,6 +114,6 @@ struct EventModel: Equatable {
         return EventModel(id: id, title: title, description: description, startDate: startDate,
                           location: location, city: city, organizerId: organizerId,
                           organizerName: organizerName, category: category, price: price,
-                          isFree: isFree, coverImageName: coverImageName, participantIds: ids)
+                          isFree: isFree, coverImageName: coverImageName, participantIds: ids, capacity: capacity)
     }
 }

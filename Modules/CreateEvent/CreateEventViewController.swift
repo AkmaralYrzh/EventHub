@@ -63,6 +63,11 @@ final class CreateEventViewController: UIViewController {
             .assign(to: \.isFree, on: viewModel)
             .store(in: &cancellables)
 
+        createView.capacityField.publisher(for: \.text)
+            .compactMap { $0 }
+            .assign(to: \.capacityText, on: viewModel)
+            .store(in: &cancellables)
+
         createView.freeSwitch.publisher(for: \.isOn)
             .sink { [weak self] isOn in
                 self?.createView.freeLabel.text = isOn ? L("event_free") : L("event_paid")
@@ -86,11 +91,14 @@ final class CreateEventViewController: UIViewController {
             self.viewModel.startDate = self.createView.datePicker.date
         }, for: .valueChanged)
 
-        viewModel.$isDateValid
+        // Подсказка под формой: сначала про дату, потом про количество мест
+        viewModel.$isDateValid.combineLatest(viewModel.$isCapacityValid)
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] isValid in
-                self?.createView.errorLabel.text = isValid ? nil : L("createevent_error_past_date")
-                self?.createView.errorLabel.isHidden = isValid
+            .sink { [weak self] isDateValid, isCapacityValid in
+                let message: String? = !isDateValid ? L("createevent_error_past_date")
+                    : !isCapacityValid ? L("createevent_error_capacity") : nil
+                self?.createView.errorLabel.text = message
+                self?.createView.errorLabel.isHidden = (message == nil)
             }
             .store(in: &cancellables)
 
