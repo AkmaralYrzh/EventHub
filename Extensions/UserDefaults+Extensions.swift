@@ -7,6 +7,7 @@ extension UserDefaults {
         static let userRole = "userRole"
         static let userName = "userName"
         static let forceDarkTheme = "forceDarkTheme"
+        static let notificationsEnabled = "notificationsEnabled"
     }
 
     var hasSeenOnboarding: Bool {
@@ -30,5 +31,10 @@ extension UserDefaults {
     var forceDarkTheme: Bool {
         get { bool(forKey: Keys.forceDarkTheme) }
         set { set(newValue, forKey: Keys.forceDarkTheme) }
+    }
+
+    var notificationsEnabled: Bool {
+        get { bool(forKey: Keys.notificationsEnabled) }
+        set { set(newValue, forKey: Keys.notificationsEnabled) }
     }
 }

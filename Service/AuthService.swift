@@ -29,6 +29,7 @@ final class AuthService {
         case .userDisabled:                       return .userDisabled
         case .tooManyRequests:                    return .tooManyRequests
         case .networkError:                       return .network
+        case .requiresRecentLogin:                return .requiresRecentLogin
         default:                                  return .unknown
         }
     }
@@ -148,6 +149,69 @@ final class AuthService {
                         promise(.failure(error))
                     } else {
                         promise(.success(()))
+                    }
+                }
+            }
+        }
+        .eraseToAnyPublisher()
+    }
+
+    // MARK: - Профиль и аккаунт
+
+    /// Обновляет имя и фамилию в Firestore и в локальном кэше.
+    func updateName(uid: String, firstName: String, lastName: String) -> AnyPublisher<Void, Error> {
+        Deferred {
+            Future { [weak self] promise in
+                let update: [String: Any] = ["firstName": firstName, "lastName": lastName]
+                self?.db.collection("users").document(uid).updateData(update) { error in
+                    if let error = error {
+                        promise(.failure(AuthService.mapError(error)))
+                    } else {
+                        UserDefaults.standard.userName = "\(firstName) \(lastName)"
+                        promise(.success(()))
+                    }
+                }
+            }
+        }
+        .eraseToAnyPublisher()
+    }
+
+    /// Firebase присылает письмо со ссылкой на смену пароля.
+    func sendPasswordReset(email: String) -> AnyPublisher<Void, Error> {
+        Deferred {
+            Future { promise in
+                Auth.auth().sendPasswordReset(withEmail: email) { error in
+                    if let error = error {
+                        promise(.failure(AuthService.mapError(error)))
+                    } else {
+                        promise(.success(()))
+                    }
+                }
+            }
+        }
+        .eraseToAnyPublisher()
+    }
+
+    /// Удаляет документ профиля, затем сам аккаунт Firebase Auth.
+    /// Firebase может потребовать недавний вход (requiresRecentLogin) — тогда вернётся ошибка.
+    func deleteAccount() -> AnyPublisher<Void, Error> {
+        Deferred {
+            Future { [weak self] promise in
+                guard let user = Auth.auth().currentUser else {
+                    promise(.failure(AuthError.userNotFound))
+                    return
+                }
+                self?.db.collection("users").document(user.uid).delete { error in
+                    if let error = error {
+                        promise(.failure(AuthService.mapError(error)))
+                        return
+                    }
+                    user.delete { error in
+                        if let error = error {
+                            promise(.failure(AuthService.mapError(error)))
+                        } else {
+                            promise(.success(()))
+                        }
                     }
                 }
             }

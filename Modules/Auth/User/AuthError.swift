@@ -12,6 +12,7 @@ enum AuthError: LocalizedError, Equatable {
     case tooManyRequests
     case network
     case profileNotFound
+    case requiresRecentLogin
     case unknown
 
     /// Ключ локализации — один на случай, чтобы текст менялся вместе с языком приложения.
@@ -26,6 +27,7 @@ enum AuthError: LocalizedError, Equatable {
         case .tooManyRequests:   return "auth_error_too_many_requests"
         case .network:           return "auth_error_network"
         case .profileNotFound:   return "auth_error_profile_not_found"
+        case .requiresRecentLogin: return "auth_error_requires_recent_login"
         case .unknown:           return "auth_error_unknown"
         }
     }

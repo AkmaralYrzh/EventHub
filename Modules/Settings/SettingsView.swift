@@ -10,15 +10,18 @@ final class SettingsView: UIView {
     let editProfileRow = UIControl()
     let editProfileLabel = UILabel()
 
-    let accountSettingsRow = UIControl()
-    let accountSettingsLabel = UILabel()
-    let paymentRow = UIControl()
-    let paymentLabel = UILabel()
+    let changePasswordRow = UIControl()
+    let changePasswordLabel = UILabel()
+    let deleteAccountRow = UIControl()
+    let deleteAccountLabel = UILabel()
 
-    let notificationsRow = UIControl()
     let notificationsLabel = UILabel()
+    let notificationsSwitch = UISwitch()
     let permissionsRow = UIControl()
     let permissionsLabel = UILabel()
+    let languageRow = UIControl()
+    let languageLabel = UILabel()
+    let languageValueLabel = UILabel()
     let darkThemeLabel = UILabel()
     let darkThemeSwitch = UISwitch()
 
@@ -96,6 +99,24 @@ final class SettingsView: UIView {
             accessory.centerYAnchor.constraint(equalTo: row.centerYAnchor),
             accessory.leadingAnchor.constraint(greaterThanOrEqualTo: label.trailingAnchor, constant: 8)
         ])
+    }
+
+    /// Строка «подпись + переключатель» — без UIControl, чтобы тап не перехватывал свитч.
+    private func makeSwitchRow(label: UILabel, toggle: UISwitch) -> UIView {
+        styleRowLabel(label)
+        let row = UIView()
+        [label, toggle].forEach {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            row.addSubview($0)
+        }
+        NSLayoutConstraint.activate([
+            row.heightAnchor.constraint(equalToConstant: 50),
+            label.leadingAnchor.constraint(equalTo: row.leadingAnchor, constant: 16),
+            label.centerYAnchor.constraint(equalTo: row.centerYAnchor),
+            toggle.trailingAnchor.constraint(equalTo: row.trailingAnchor, constant: -16),
+            toggle.centerYAnchor.constraint(equalTo: row.centerYAnchor)
+        ])
+        return row
     }
 
     private func makeDivider() -> UIView {
@@ -193,30 +214,28 @@ final class SettingsView: UIView {
 
         styleSectionLabel(accountSectionLabel)
         accountSectionLabel.text = L("settings_section_account")
-        fillRow(accountSettingsRow, label: accountSettingsLabel, accessory: makeChevron())
-        fillRow(paymentRow, label: paymentLabel, accessory: makeChevron())
-        let accountCard = makeCard(rows: [accountSettingsRow, paymentRow])
+        fillRow(changePasswordRow, label: changePasswordLabel, accessory: makeChevron())
+        fillRow(deleteAccountRow, label: deleteAccountLabel, accessory: makeChevron())
+        deleteAccountLabel.textColor = .eventHubError
+        let accountCard = makeCard(rows: [changePasswordRow, deleteAccountRow])
 
         styleSectionLabel(settingsSectionLabel)
         settingsSectionLabel.text = L("settings_section_settings")
-        fillRow(notificationsRow, label: notificationsLabel, accessory: makeChevron())
+        let notificationsRow = makeSwitchRow(label: notificationsLabel, toggle: notificationsSwitch)
         fillRow(permissionsRow, label: permissionsLabel, accessory: makeChevron())
 
-        styleRowLabel(darkThemeLabel)
-        let themeRow = UIView()
-        [darkThemeLabel, darkThemeSwitch].forEach {
-            $0.translatesAutoresizingMaskIntoConstraints = false
-            themeRow.addSubview($0)
-        }
-        NSLayoutConstraint.activate([
-            themeRow.heightAnchor.constraint(equalToConstant: 50),
-            darkThemeLabel.leadingAnchor.constraint(equalTo: themeRow.leadingAnchor, constant: 16),
-            darkThemeLabel.centerYAnchor.constraint(equalTo: themeRow.centerYAnchor),
-            darkThemeSwitch.trailingAnchor.constraint(equalTo: themeRow.trailingAnchor, constant: -16),
-            darkThemeSwitch.centerYAnchor.constraint(equalTo: themeRow.centerYAnchor)
-        ])
+        // Язык: справа — текущее значение и шеврон
+        languageValueLabel.font = .systemFont(ofSize: 15)
+        languageValueLabel.textColor = .eventHubSecondary
+        let languageAccessory = UIStackView(arrangedSubviews: [languageValueLabel, makeChevron()])
+        languageAccessory.axis = .horizontal
+        languageAccessory.spacing = 8
+        languageAccessory.alignment = .center
+        fillRow(languageRow, label: languageLabel, accessory: languageAccessory)
 
-        let settingsCard = makeCard(rows: [notificationsRow, permissionsRow, themeRow])
+        let themeRow = makeSwitchRow(label: darkThemeLabel, toggle: darkThemeSwitch)
+
+        let settingsCard = makeCard(rows: [notificationsRow, permissionsRow, languageRow, themeRow])
 
         styleSectionLabel(resourcesSectionLabel)
         resourcesSectionLabel.text = L("settings_section_resources")

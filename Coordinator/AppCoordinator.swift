@@ -143,7 +143,26 @@ final class AppCoordinator: Coordinator {
         vc.onProfileTap = { [weak self] in
             self?.profileNavigationController?.popViewController(animated: true)
         }
+        vc.onEditProfileTap = { [weak self] in self?.showEditProfile() }
+        vc.onLanguageChanged = { [weak self] in self?.rebuildAfterLanguageChange() }
+        vc.onAccountDeleted = { [weak self] in self?.showLogin() }
         profileNavigationController?.pushViewController(vc, animated: true)
+    }
+
+    private func showEditProfile() {
+        let vc = EditProfileViewController(viewModel: EditProfileViewModel())
+        vc.onSaved = { [weak self] in
+            self?.profileNavigationController?.popViewController(animated: true)
+        }
+        profileNavigationController?.pushViewController(vc, animated: true)
+    }
+
+    /// Все тексты берутся через L() при создании экранов, поэтому после смены языка
+    /// проще пересобрать таб-бар целиком и вернуться в настройки.
+    private func rebuildAfterLanguageChange() {
+        routeByRole()
+        tabBarController?.selectedIndex = 3
+        showSettings()
     }
 
     private func showLogin() {
