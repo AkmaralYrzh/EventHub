@@ -24,6 +24,7 @@ final class CreateEventViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        hideKeyboardWhenTappedAround()
         createView.datePicker.date = viewModel.startDate
         setupBindings()
         createView.createButton.addTarget(self, action: #selector(createTapped), for: .touchUpInside)

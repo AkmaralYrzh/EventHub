@@ -25,6 +25,7 @@ class SignUpViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        hideKeyboardWhenTappedAround()
         title = L("signup_title")
         setupBindings()
     }

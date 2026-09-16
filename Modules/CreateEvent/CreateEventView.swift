@@ -63,6 +63,7 @@ final class CreateEventView: UIView {
     private func setupViews() {
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.showsVerticalScrollIndicator = false
+        scrollView.keyboardDismissMode = .interactive
         addSubview(scrollView)
 
         contentStackView.translatesAutoresizingMaskIntoConstraints = false
@@ -135,6 +136,8 @@ final class CreateEventView: UIView {
         descriptionField.placeholder = L("createevent_description_placeholder")
         locationField.placeholder = L("createevent_location_placeholder")
         priceField.placeholder = L("createevent_price_placeholder")
+        priceField.keyboardType = .decimalPad
+        [titleField, descriptionField, locationField].forEach { $0.returnKeyType = .done }
 
         cityControl.insertSegment(withTitle: L("city_almaty"), at: 0, animated: false)
         cityControl.insertSegment(withTitle: L("city_astana"), at: 1, animated: false)
