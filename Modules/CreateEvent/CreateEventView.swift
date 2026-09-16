@@ -22,6 +22,8 @@ final class CreateEventView: UIView {
         let picker = UIDatePicker()
         picker.datePickerMode = .dateAndTime
         picker.preferredDatePickerStyle = .compact
+        picker.minimumDate = Date()
+        picker.minuteInterval = 5
         return picker
     }()
 

@@ -68,3 +68,4 @@
 "event_paid" = "Paid";
 "home_title" = "Events of the week";
 "city_subtitle" = "Events happen all over the world — pick a city to see what is going on there.";
+"createevent_error_past_date" = "The start date has already passed — pick a future date";

@@ -24,6 +24,7 @@ final class CreateEventViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        createView.datePicker.date = viewModel.startDate
         setupBindings()
         createView.createButton.addTarget(self, action: #selector(createTapped), for: .touchUpInside)
     }
@@ -83,6 +84,14 @@ final class CreateEventViewController: UIViewController {
             guard let self else { return }
             self.viewModel.startDate = self.createView.datePicker.date
         }, for: .valueChanged)
+
+        viewModel.$isDateValid
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] isValid in
+                self?.createView.errorLabel.text = isValid ? nil : L("createevent_error_past_date")
+                self?.createView.errorLabel.isHidden = isValid
+            }
+            .store(in: &cancellables)
 
         createView.coverSwatchesStackView.arrangedSubviews
             .compactMap { $0 as? UIControl }

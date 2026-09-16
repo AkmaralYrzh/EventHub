@@ -44,7 +44,7 @@
 "city_all" = "Все города";
 "city_selection_title" = "Выберите город";
 "city_events_suffix" = "событий";
- "tab_map" = "Карта";
+"tab_map" = "Карта";
 "login_welcome_new" = "Добро пожаловать!";
 "login_welcome_back" = "С возвращением, %@!";
 "profile_tab_upcoming" = "Предстоящие";
@@ -68,3 +68,4 @@
 "event_paid" = "Платная";
 "home_title" = "Мероприятия недели";
 "city_subtitle" = "Мероприятия проходят по всему миру — выбери город, чтобы посмотреть, что там сейчас происходит.";
+"createevent_error_past_date" = "Дата начала уже прошла — выбери будущую дату";
